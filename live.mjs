@@ -1,7 +1,7 @@
 import "./mute-auto.mjs"
 import { MUTE_LAUNCH, muteContext } from './mute.mjs'
 // 公開URLの確認。node live.mjs（ログインしていないブラウザで見る）。SKIPGH=1 で GitHub ページの確認を省く
-// koi-mikuji __NS__ を置き換え、「遊びの通し」をゲームに合わせて書く
+// github.io は tom3games.com へ転送されるので、転送の1行だけ外して Pages の中身を確かめる
 import { chromium, webkit } from 'playwright'
 import { execSync } from 'node:child_process'
 // 個人のアカウント名は公開リポジトリに書かない。実行時に gh から取る（2026-11-02 live.mjs に名前が文字で入ったまま5本公開していた）
@@ -15,11 +15,17 @@ for (const [name, bt, opts] of [['chromium', chromium, {}], ['webkit', webkit, {
   const errs = []
   p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()) })
   p.on('requestfailed', r => errs.push('fail ' + r.url()))
+  await p.route(u => u.href.startsWith(URL0) && u.pathname === '/koi-mikuji/', async r => { const res = await r.fetch(); r.fulfill({ response: res, body: (await res.text()).replace(/<script id="ghMove">[^<]*<\/script>/, '') }) })
   await p.goto(URL0 + '?t=' + Date.now(), { waitUntil: 'networkidle' })
   await p.waitForFunction(() => window.__kmReady, null, { timeout: 15000 })
-  // ---- 遊びの通し（タイトル → 遊ぶ → 結果）をここに書く ----
+  const touch = name === 'webkit', tap = async n => { const r = await p.evaluate(n => km.xy(n), n); if (touch) await p.touchscreen.tap(r.x, r.y); else await p.mouse.click(r.x, r.y) }
+  await p.waitForTimeout(500); await tap('start'); await p.waitForTimeout(400); await tap('.sit[data-s="kata"]'); await tap('go'); await p.waitForTimeout(300)
+  for (let i = 0; i < 3; i++) { await tap('box'); await p.waitForTimeout(600) }
+  await p.waitForTimeout(400); await tap('stick'); await p.waitForTimeout(500); await tap('folded'); await p.waitForTimeout(1000)
+  const r = await p.evaluate(() => ({ v: [...document.scripts].map(s => s.src).filter(s => /game\.js/.test(s))[0], slip: km.slip() && km.slip().rank, pr: !document.querySelector('#affBox').hidden, mute: window.__muteOk() }))
+  out.push(`${name}: ${JSON.stringify(r)}`)
   await p.screenshot({ path: `shots/live-${name}.png` })
-  const og = await p.evaluate(async () => { const r = await fetch(document.querySelector('meta[property="og:image"]').content); return r.status + ' ' + r.headers.get('content-type') })
+  const og = (await p.request.get(URL0 + 'og.png')).status()
   out.push(`${name}: og=${og} errors=${errs.length ? errs.join(' | ') : 'none'}`)
   await b.close()
 }
