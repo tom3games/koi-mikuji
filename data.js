@@ -1,137 +1,154 @@
-// 恋みくじ連打: くじの文・段位・画面の文言（日英）
+// 恋みくじ v2: 本物の形のおみくじ1枚（運勢・一句・総評・状況ごとの項目）。日英
 window.D = (function () {
-  const R = {
-    dk: { ja: '大吉', en: 'Great Luck', p: 3, c: '#c4402a' },
-    ki: { ja: '吉', en: 'Good Luck', p: 2, c: '#c4402a' },
-    sk: { ja: '小吉', en: 'Small Luck', p: 1, c: '#8a5a2b' },
-    sue: { ja: '末吉', en: 'Future Luck', p: 0, c: '#8a5a2b' },
-    kyo: { ja: '凶', en: 'Bad Luck', p: 0, c: '#2b3a55', bad: true },
-    dkyo: { ja: '大凶', en: 'Terrible Luck', p: 0, c: '#1b2235', bad: true },
-  }
-  const C = {
-    machi: { ja: '待ち人', en: 'Awaited one' }, renai: { ja: '恋愛', en: 'Love' }, endan: { ja: '縁談', en: 'Marriage' },
-    deai: { ja: '出会い', en: 'Encounters' }, unsei: { ja: '恋愛運', en: 'Love luck' },
-  }
-  // [id, 段, 項目, 日本語, 英語, 珍しい(金の光でだけ出る), 祟り]
-  const L = [
-    ['dk1', 'dk', 'machi', '来る。三人同時に来る', 'Arrives. Three of them at once.'],
-    ['dk2', 'dk', 'renai', '向こうから告白される。しかも敬語で', 'They confess first. Very politely.'],
-    ['dk3', 'dk', 'endan', '両家の親が先に仲良くなる', 'Both sets of parents become friends first.'],
-    ['dk4', 'dk', 'renai', '目が合っただけで両想い', 'One glance and it is mutual.'],
-    ['dk5', 'dk', 'machi', '来る。花束を持って走って来る', 'Arrives, running, holding flowers.'],
-    ['dk6', 'dk', 'deai', 'コンビニのレジで運命が起きる', 'Destiny happens at a convenience store register.'],
-    ['dk7', 'dk', 'endan', '相手の猫もあなたを気に入る', 'Their cat approves of you too.'],
-    ['dk8', 'dk', 'renai', '既読が1秒でつく', 'They read your messages within one second.'],
-    ['dk9', 'dk', 'machi', 'もう隣にいる。気づけ', 'Already next to you. Notice.', 1],
-    ['dk10', 'dk', 'renai', '赤い糸、太さ3センチ', 'Your red string of fate is 3 cm thick.', 1],
-    ['dk11', 'dk', 'endan', '式場の予約が向こうから空く', 'The wedding venue clears its own calendar.', 1],
-
-    ['ki1', 'ki', 'renai', '好かれる。理由は声が大きいから', 'You will be liked. Because you are loud.'],
-    ['ki2', 'ki', 'machi', '来る。少し遅れて、言い訳つきで', 'Arrives a little late, with excuses.'],
-    ['ki3', 'ki', 'deai', '傘を貸すと始まる。傘は返ってこない', 'Lend an umbrella and it begins. The umbrella never returns.'],
-    ['ki4', 'ki', 'endan', 'まとまる。ただし話が長い', 'It works out. The speeches run long.'],
-    ['ki5', 'ki', 'renai', 'デートは雨。それでも楽しい', 'Rain on the date. Fun anyway.'],
-    ['ki6', 'ki', 'machi', '来る。名前を一回まちがえる', 'Arrives. Gets your name wrong once.'],
-    ['ki7', 'ki', 'renai', '手料理をほめられる。カップ麺だけど', 'They praise your cooking. It was cup noodles.'],
-    ['ki8', 'ki', 'endan', '隣の席の人。ただし気づくのは10年後', 'The person in the next seat. You notice in 10 years.', 1],
-    ['ki9', 'ki', 'deai', '落とした小銭を拾った人と結ばれる', 'You end up with whoever picks up your dropped coins.', 1],
-
-    ['sk1', 'sk', 'renai', '進展あり。2ミリ', 'Progress. Two millimeters.'],
-    ['sk2', 'sk', 'machi', '来る。来たけど帰る', 'Arrives. Then goes home.'],
-    ['sk3', 'sk', 'deai', 'ある。相手は道を聞きたいだけ', 'Yes. They only want directions.'],
-    ['sk4', 'sk', 'renai', 'やりとりは続く。スタンプだけで', 'The chat continues. Stickers only.'],
-    ['sk5', 'sk', 'endan', '友達の友達の、そのまた友達', 'A friend of a friend of a friend.'],
-    ['sk6', 'sk', 'renai', 'ほめられる。前髪だけ', 'You get a compliment. On your bangs.'],
-    ['sk7', 'sk', 'machi', '来る。来世で', 'Arrives. Next life.', 1],
-
-    ['sue1', 'sue', 'renai', 'いつか良くなる。いつかは言えない', 'It gets better someday. Which day, we cannot say.'],
-    ['sue2', 'sue', 'machi', '来ず。代わりに請求書が来る', 'Not coming. A bill comes instead.'],
-    ['sue3', 'sue', 'deai', '合コンで幹事とだけ仲良くなる', 'At the mixer you bond with the organizer. Only.'],
-    ['sue4', 'sue', 'endan', '話は出る。親戚の集まりでだけ', 'It comes up. Only at family gatherings.'],
-    ['sue5', 'sue', 'renai', '夢に出てくる。あなたの夢に', 'They appear in a dream. Yours.'],
-    ['sue6', 'sue', 'machi', '迷っている。地図アプリを見ろ', 'Lost on the way. Tell them to open a map.'],
-    ['sue7', 'sue', 'renai', '好みが急に変わる。明日から鳥', 'Your type suddenly changes. Birds, from tomorrow.', 1],
-
-    ['kyo1', 'kyo', 'machi', '来ず。むしろ去る', 'Not coming. In fact, leaving.', 0, 'crow'],
-    ['kyo2', 'kyo', 'unsei', '家の猫に負ける', 'You lose to your own cat.', 0, 'crow'],
-    ['kyo3', 'kyo', 'deai', 'ある。全員既婚', 'Plenty. All married.', 0, 'ex'],
-    ['kyo4', 'kyo', 'renai', '告白は届く。別の人に', 'Your confession arrives. To someone else.', 0, 'crow'],
-    ['kyo5', 'kyo', 'endan', '先方の都合で延期。永遠に', 'Postponed on their side. Forever.', 0, 'ex'],
-    ['kyo6', 'kyo', 'renai', '既読はつく。返事はつかない', 'Read. Not answered.', 0, 'crow'],
-    ['kyo7', 'kyo', 'machi', '来る。元恋人だった', 'Arrives. It is your ex.', 0, 'ex'],
-    ['kyo8', 'kyo', 'renai', '好きな人の好きな人が、あなたの母', 'The one you like likes your mom.', 1, 'ex'],
-
-    ['dkyo1', 'dkyo', 'renai', '今年の恋は全部夢オチ', 'Every romance this year turns out to be a dream.', 0, 'crow2'],
-    ['dkyo2', 'dkyo', 'machi', '来ない。住所を変えた', 'Not coming. They moved.', 0, 'ex2'],
-    ['dkyo3', 'dkyo', 'endan', '縁が切れる。糸が物理的に切れる', 'The bond breaks. The string physically snaps.', 0, 'crow2'],
-    ['dkyo4', 'dkyo', 'deai', '運命の人とすれ違う。あなたは寝ている', 'You pass your soulmate. You are asleep.', 0, 'ex2'],
-    ['dkyo5', 'dkyo', 'renai', 'モテ期が来る。昨日終わった', 'Your popular phase came. It ended yesterday.', 0, 'ex2'],
-    ['dkyo6', 'dkyo', 'renai', '送る長文が全部誤字', 'Every long message you send is a typo.', 0, 'crow2'],
-    ['dkyo7', 'dkyo', 'machi', '来ない。代わりにカラスが来る', 'Not coming. A crow comes instead.', 1, 'crow2'],
-    ['dkyo8', 'dkyo', 'unsei', 'くじを引きすぎ。縁が渋滞', 'Too many fortunes drawn. Your fate is stuck in traffic.', 1, 'ex2'],
+  const RANK = [
+    { id: 'dk', ja: '大吉', en: 'Great Blessing', tier: 'g' },
+    { id: 'ck', ja: '中吉', en: 'Middle Blessing', tier: 'g' },
+    { id: 'sk', ja: '小吉', en: 'Small Blessing', tier: 'm' },
+    { id: 'ki', ja: '吉', en: 'Blessing', tier: 'm' },
+    { id: 'sue', ja: '末吉', en: 'Future Blessing', tier: 'm' },
+    { id: 'kyo', ja: '凶', en: 'Curse', tier: 'b' },
   ]
-  const SLIPS = L.map(([id, r, c, ja, en, rare, curse]) => ({ id, r, c, t: { ja, en }, rare: !!rare, curse: curse || null }))
+  // 今日の運の出やすさ（大吉〜凶）。振り方で一段上下する
+  const FATE = [16, 18, 18, 20, 16, 12]
 
-  // 縁結びの段位（点が足りるところまで）
-  const LV = [
-    { min: 0, ja: '縁、ゼロ', en: 'Zero Ties', sja: '神主さんが同情している', sen: 'The priest feels for you.' },
-    { min: 1, ja: '小指に糸くず', en: 'Lint on Your Pinky', sja: '糸と呼ぶにはまだ早い', sen: 'Too early to call it a string.' },
-    { min: 4, ja: '糸が見えてきた', en: 'A Thread Appears', sja: '目をこらせば見える', sen: 'Visible if you squint.' },
-    { min: 8, ja: '片想いの蝶結び', en: 'One-Sided Bow', sja: '引っぱるとほどける', sen: 'Comes undone if pulled.' },
-    { min: 14, ja: '両想いの固結び', en: 'Mutual Square Knot', sja: 'もうほどけない', sen: 'It will not come loose.' },
-    { min: 21, ja: '運命の赤い糸', en: 'Red String of Fate', sja: '小指が少し重い', sen: 'Your pinky feels heavy.' },
-    { min: 29, ja: '赤い糸ぐるぐる巻き', en: 'Wrapped in Red String', sja: '手首まで巻かれている', sen: 'It reaches your wrist.' },
-    { min: 38, ja: '結ばれすぎて動けない', en: 'Too Tied to Move', sja: '神主さんがほどきに来た', sen: 'The priest came to untie you.' },
+  // 状況と、紙に載る項目（右から順に）
+  const SIT = [
+    { id: 'kata', ja: '片思い', en: 'Crush', items: ['aite', 'kokuhaku', 'machi', 'gan', 'place'] },
+    { id: 'tsuki', ja: '付き合っている', en: 'Together', items: ['aite', 'kenka', 'endan', 'gan', 'place'] },
+    { id: 'fuku', ja: '復縁したい', en: 'Want them back', items: ['fukuen', 'aite', 'machi', 'gan', 'place'] },
+    { id: 'deai', ja: '出会いがない', en: 'No one yet', items: ['deai', 'machi', 'renai', 'gan', 'place'] },
+    { id: 'futa', ja: '気になる人が二人', en: 'Torn between two', items: ['mayoi', 'aite', 'kokuhaku', 'gan', 'place'] },
+    { id: 'kekkon', ja: '結婚したい', en: 'Want to marry', items: ['endan', 'kazoku', 'machi', 'gan', 'place'] },
   ]
-  const NOPLAY = { ja: '引いてもいない', en: 'Did Not Even Draw', sja: '箱は振らないと出ない', sen: 'The box needs shaking.' }
-
-  // 遊び中の一言（12字前後）
+  const LABEL = {
+    aite: { ja: '相手の心', en: 'Their heart' }, kokuhaku: { ja: '告白', en: 'Confession' }, machi: { ja: '待ち人', en: 'Awaited one' },
+    gan: { ja: '願望', en: 'Wish' }, place: { ja: '縁の場所', en: 'Lucky place' }, kenka: { ja: '争事', en: 'Quarrels' },
+    endan: { ja: '縁談', en: 'Marriage' }, fukuen: { ja: '復縁', en: 'Reunion' }, deai: { ja: '出会い', en: 'Meeting' },
+    renai: { ja: '恋愛', en: 'Love' }, mayoi: { ja: '迷い', en: 'Choosing' }, kazoku: { ja: '家族', en: 'Family' },
+  }
+  // [日本語, 英語]。g=大吉中吉 m=小吉吉末吉 b=凶
+  const T = {
+    aite: {
+      g: [['あなたを思う。言葉にするのが下手なだけ', 'They think of you. They are just bad at saying it.'], ['好意あり。あなたの話を三日後に思い出し笑い', 'They like you. They laugh about your story three days later.'], ['心は近い。返事が早くなる', 'Close at heart. Their replies get faster.'], ['気にかけている。あなたの好物を覚えている', 'They care. They remember your favorite food.']],
+      m: [['まだ決めかねている。押しすぎず引きすぎず', 'Still undecided. Do not push or pull too hard.'], ['嫌ってはいない。ただ今は眠い', 'They do not dislike you. They are just sleepy.'], ['好意はある。量は小さじ一杯', 'There is affection. About one teaspoon.'], ['揺れている。天気のように変わりやすい', 'Wavering, like the weather.']],
+      b: [['今は遠い。追えば逃げる', 'Far for now. Chase and they run.'], ['別のことで頭がいっぱい。主に昼ごはん', 'Busy with other thoughts. Mostly lunch.'], ['気づいていない。存在ごと', 'They have not noticed. You, at all.'], ['心が閉じている。急がず時を待て', 'Their heart is closed. Wait, do not rush.']],
+    },
+    kokuhaku: {
+      g: [['吉。晴れた夕方に伝えよ', 'Good. Tell them on a clear evening.'], ['想いは届く。噛んでも届く', 'It reaches them. Even if you stumble.'], ['時は満ちた。長文を送るな、会って言え', 'The time is right. No long texts. Say it in person.'], ['叶う。言う前に鏡を一度見よ', 'It works. Check a mirror once first.']],
+      m: [['急ぐな。もう少し話してから', 'No rush. Talk a little more first.'], ['半分届く。残りは笑顔で補え', 'Half of it lands. Make up the rest with a smile.'], ['時期を待て。月末は避けよ', 'Wait. Avoid the end of the month.'], ['言葉より行いで示せ', 'Show it through actions, not words.']],
+      b: [['控えよ。勢いの告白は風に消える', 'Hold back. An impulsive confession blows away.'], ['今は伝わらない。電波も悪い', 'It will not get through now. Bad signal too.'], ['待て。深夜の送信は朝に悔やむ', 'Wait. A midnight message is regretted by morning.'], ['見送れ。まず自分を整えよ', 'Let it pass. Sort yourself out first.']],
+    },
+    machi: {
+      g: [['来る。ただし寝癖のまま', 'Arrives. With bed hair.'], ['来る。思ったより早く', 'Arrives, sooner than you think.'], ['来る。笑顔で、少し遅れて', 'Arrives smiling, a little late.'], ['近くにいる。顔を上げよ', 'Nearby. Look up.']],
+      m: [['遅れて来る。道に迷っている', 'Arrives late. Lost on the way.'], ['来る。ただし電車を一本乗り過ごす', 'Arrives. After missing one train.'], ['来るが気づきにくい。眼鏡を拭け', 'Arrives, but easy to miss. Clean your glasses.'], ['便りが先。本人は後から', 'Word comes first. They come later.']],
+      b: [['来ず。今は自分を磨く時', 'Not coming. Time to polish yourself.'], ['来ない。代わりに宅配便が来る', 'Not coming. A delivery comes instead.'], ['遅し。焦れば遠のく', 'Slow. Rushing pushes it away.'], ['来ず。むしろ去る', 'Not coming. In fact, leaving.']],
+    },
+    endan: {
+      g: [['整う。両家の話もはずむ', 'It comes together. Both families get along.'], ['まとまる。日取りは春がよし', 'It works out. Spring is the season.'], ['良縁あり。紹介を断るな', 'A good match. Do not turn down introductions.'], ['進む。決め手は相手の母の笑顔', 'It moves forward. Their mother\'s smile decides it.']],
+      m: [['急がば回れ。話はゆっくり進む', 'Slow and steady. It moves gradually.'], ['整うが手間取る。書類は二度確かめよ', 'It comes together with fuss. Check paperwork twice.'], ['まとまりかける。親戚の一言に注意', 'Nearly there. Beware of a relative\'s remark.'], ['時期尚早。まず二人で旅をせよ', 'Too early. Travel together first.']],
+      b: [['今は動くな。足元を固めよ', 'Do not move now. Steady your footing.'], ['障りあり。言葉選びに気をつけよ', 'Obstacles. Choose your words with care.'], ['延びる。焦らず待て', 'Delayed. Wait calmly.'], ['見送れ。他に縁あり', 'Let it pass. Another match is out there.']],
+    },
+    gan: {
+      g: [['叶う。思うより大きく', 'Fulfilled, bigger than you hope.'], ['叶う。人の助けあり', 'Fulfilled, with help from others.'], ['望み通り。ただし調子に乗るな', 'As you wish. Do not get carried away.'], ['叶う。お礼参りを忘れずに', 'Fulfilled. Come back to give thanks.']],
+      m: [['叶うが遅い。気長に待て', 'Fulfilled, slowly. Be patient.'], ['半ば叶う。欲張れば逃す', 'Half fulfilled. Greed loses it.'], ['努力次第。三日坊主に注意', 'Depends on effort. Beware of quitting on day three.'], ['少しずつ叶う。毎日の小さな一歩', 'Bit by bit. A small step each day.']],
+      b: [['今は叶い難し。願いを一つに絞れ', 'Hard for now. Narrow it to one wish.'], ['思うようにならず。焦りは禁物', 'Not as you hope. Do not rush.'], ['遠し。まずよく寝よ', 'Far off. Get some sleep first.'], ['叶わず。しかし次の芽あり', 'Not this time. A new bud is coming.']],
+    },
+    kenka: {
+      g: [['起きても仲直りは早い', 'Even if it happens, you make up fast.'], ['争いなし。話せば分かる', 'No conflict. Talking settles it.'], ['勝ちを譲れば二人とも勝つ', 'Let them win and you both win.'], ['穏やか。争いの種は冷蔵庫のプリン程度', 'Calm. The worst fight is over the pudding in the fridge.']],
+      m: [['小さな言い合いあり。食事の後に話せ', 'Small arguments. Talk after eating.'], ['言い過ぎに注意。一晩置け', 'Watch your words. Sleep on it.'], ['返事の遅さで揉める。気にするな', 'A slow reply causes friction. Let it go.'], ['譲り合えば収まる', 'Meeting halfway settles it.']],
+      b: [['争い多し。正しさより優しさ', 'Many quarrels. Kindness over being right.'], ['揉める。原因は洗い物', 'Friction. Cause: the dishes.'], ['言葉が刺さる。今日は黙ってうなずけ', 'Words cut. Today, just nod.'], ['長引く。謝るなら先に', 'It drags on. Apologize first.']],
+    },
+    fukuen: {
+      g: [['望みあり。相手も同じ思い出を見ている', 'There is hope. They look at the same memories.'], ['再び結ばれる兆し。昔の店へ', 'Signs of reuniting. Go to your old place.'], ['戻る道あり。同じ過ちはするな', 'There is a way back. Do not repeat mistakes.'], ['縁はまだ切れず', 'The bond is not cut yet.']],
+      m: [['時を置け。半年後に風が変わる', 'Give it time. The wind changes in half a year.'], ['友として戻るのが先', 'Return as friends first.'], ['五分五分。決めるのはあなたの変わり方', 'Even odds. It depends on how you change.'], ['連絡は短く。思い出話は封印', 'Keep messages short. Seal away nostalgia.']],
+      b: [['難し。新しい縁が近くに来ている', 'Difficult. A new connection is near.'], ['追うな。相手は新しい髪型', 'Do not chase. They have a new haircut.'], ['戻らず。写真の整理を始めよ', 'It will not return. Start sorting your photos.'], ['今は見送れ。心を休めよ', 'Let it go for now. Rest your heart.']],
+    },
+    deai: {
+      g: [['あり。友人の誘いに乗れ', 'Yes. Accept a friend\'s invitation.'], ['近し。いつもと違う道で', 'Soon. On a different route than usual.'], ['多し。ただし全員と連絡先を交換するな', 'Plenty. Do not swap contacts with all of them.'], ['思わぬ所で。たぶん雨宿り中', 'In an unexpected place. Probably sheltering from rain.']],
+      m: [['少しずつ増える。外へ出よ', 'Slowly increasing. Go outside.'], ['あるが気づかない。人の話を聞け', 'They are there, unnoticed. Listen to people.'], ['趣味の場に縁あり', 'A connection at a hobby gathering.'], ['遅い。先に部屋を片付けよ', 'Slow. Clean your room first.']],
+      b: [['今は少なし。自分を整える時', 'Few for now. Time to work on yourself.'], ['ある。全員既婚', 'Plenty. All married.'], ['家にいては来ない', 'Not while you stay home.'], ['薄し。画面の外を見よ', 'Thin. Look beyond the screen.']],
+    },
+    renai: {
+      g: [['実る。誠実さが鍵', 'It bears fruit. Sincerity is key.'], ['良し。笑い合える人を選べ', 'Good. Choose someone you laugh with.'], ['盛ん。もてる時期の入口', 'Thriving. The start of a popular phase.'], ['心が通う。焦らず育てよ', 'Hearts connect. Nurture it slowly.']],
+      m: [['進みはゆるやか。二ミリずつ', 'Slow progress. Two millimeters at a time.'], ['迷いあり。心の声に従え', 'Some doubt. Follow your heart.'], ['平穏。刺激より安心を', 'Peaceful. Choose comfort over thrills.'], ['進む。ただし家の猫に妬かれる', 'It moves. Your cat gets jealous.']],
+      b: [['迷い多し。決めるのは今ではない', 'Many doubts. Now is not the time to decide.'], ['滞る。まず暮らしを整えよ', 'Stalled. Sort out your daily life first.'], ['家の猫に負ける', 'You lose to your own cat.'], ['実らず。だが学びは大きい', 'No fruit. But big lessons.']],
+    },
+    mayoi: {
+      g: [['答えは出ている。黙っていて楽な方', 'You know already. The one you can be silent with.'], ['会った後の帰り道の気分で決めよ', 'Decide by your mood on the way home.'], ['縁の強い方は自ずと分かる', 'The stronger bond will show itself.'], ['心が決まる日は近い', 'The day your heart decides is near.']],
+      m: [['急いで決めるな。二人とも人である', 'Do not decide in haste. Both are people.'], ['比べるほど迷う。紙に書き出せ', 'The more you compare, the more lost. Write it down.'], ['どちらも半分。もう少し見よ', 'Both are half there. Watch a little longer.'], ['迷いは長引く。三人目に注意', 'Doubts linger. Beware of a third.']],
+      b: [['二兎を追う者は一兎も得ず', 'Chase two rabbits, catch none.'], ['両方から返事が来ない', 'No reply from either.'], ['今は選ぶな。どちらも遠ざかる', 'Do not choose now. Both drift away.'], ['迷うより休め', 'Rest instead of agonizing.']],
+    },
+    kazoku: {
+      g: [['喜ぶ。顔合わせは和やか', 'They are pleased. The meeting goes well.'], ['味方になる。母は既に乗り気', 'On your side. Mom is already excited.'], ['円満。親の話は長いが温かい', 'Harmonious. Parents talk long, but warmly.'], ['良し。手土産は甘いものを', 'Good. Bring sweets.']],
+      m: [['時間がかかる。少しずつ話せ', 'It takes time. Talk bit by bit.'], ['賛成半分。父が無口', 'Half in favor. Dad is quiet.'], ['心配はされる。安心を見せよ', 'They worry. Show them peace of mind.'], ['並。親戚の質問攻めに備えよ', 'Average. Brace for relatives\' questions.']],
+      b: [['反対あり。焦らず誠意を', 'Opposition. Be sincere, not hasty.'], ['今は話すな。時期を待て', 'Do not bring it up now. Wait.'], ['波風立つ。話すなら食後に', 'Waves ahead. Talk after a meal.'], ['理解され難し。まず自分の暮らしを', 'Hard to understand. Set your own life first.']],
+    },
+  }
+  const PLACE = [
+    ['駅の三番出口', 'Exit three of the station'], ['雨の日の本屋', 'A bookshop on a rainy day'], ['コンビニの冷凍庫の前', 'The convenience store freezer'], ['川沿いの道', 'A path along the river'],
+    ['古い喫茶店の窓際', 'A window seat in an old cafe'], ['夜の公園のブランコ', 'A park swing at night'], ['図書館の二階', 'The library\'s second floor'], ['商店街の八百屋の前', 'The greengrocer on the shopping street'],
+    ['ビルの屋上', 'A rooftop'], ['最寄り駅の改札の右', 'Right of your station\'s ticket gate'], ['銭湯の帰り道', 'The way home from the bathhouse'], ['花屋の前', 'In front of a flower shop'],
+    ['深夜のコインランドリー', 'A laundromat late at night'], ['バス停のベンチ', 'A bench at the bus stop'], ['港の見える坂', 'A slope with a harbor view'], ['パン屋の行列', 'The line at a bakery'],
+    ['美術館の出口', 'A museum exit'], ['神社の石段', 'The shrine\'s stone steps'], ['自販機の明かりの下', 'Under a vending machine\'s light'], ['映画館のいちばん後ろの席', 'The back row of a cinema'],
+  ]
+  // 一句（上の句・下の句・英訳）
+  const WAKA = {
+    g: [['春風に　ひらく花びら　待つ人の', '足音ちかく　胸ぞときめく', 'Petals open in the spring wind; the footsteps you await draw near.'], ['夕焼けの　空に結びし　赤き糸', 'ほどけぬままに　明日へつづく', 'The red string tied in the sunset sky runs on into tomorrow.'],
+      ['雨あがり　傘をたたみて　見上ぐれば', '虹のふもとに　君の笑み見ゆ', 'After the rain, umbrella folded, a smile at the rainbow\'s foot.'], ['梅が枝に　鶯なきて　春近し', 'こころの窓を　そっとひらけよ', 'A warbler sings on the plum; open the window of your heart.'],
+      ['月影の　さやかに照らす　帰り道', 'ふたつの影の　ひとつに重なる', 'Moonlight on the way home; two shadows become one.'], ['咲く花の　香りにさそわれ　ゆく道に', '思わぬ縁の　灯はともりけり', 'Following the blossoms\' scent, a light of fate on an unexpected path.'],
+      ['朝露の　光る小道を　ゆく人に', '幸の便りの　風ぞ吹きくる', 'To one on the dewy path, a wind brings happy news.'], ['山桜　ひとめ見しより　忘られず', '結ぶえにしは　深くなりけり', 'Since one glimpse of mountain cherry, the bond grows deep.']],
+    m: [['霧はれて　道は見えども　遠くあり', '一歩ずつこそ　歩みゆくべし', 'The fog clears; the road is long. Walk it one step at a time.'], ['秋の田の　実りを待ちて　種をまく', '急ぐ心を　しずめてぞ待て', 'Sow and wait for the harvest; calm your hurried heart.'],
+      ['夕立の　過ぎゆくまでは　軒の下', '晴れ間を待ちて　外へ出でよ', 'Stay under the eaves until the shower passes.'], ['川の瀬に　小石ながるる　音きけば', 'とどまるもまた　ひとつの道', 'Pebbles in the stream: staying put is also a path.'],
+      ['若竹の　伸びゆく先は　まだ見えず', '根をはる時と　心得て待て', 'Young bamboo cannot see its height yet. Now is for roots.'], ['寒き夜の　灯火ひとつ　ともしつつ', '春のおとずれ　静かに待たん', 'Light one lamp on a cold night and wait for spring.'],
+      ['小舟こぐ　波はおだやか　なれど風', '向きを読みつつ　舵をとるべし', 'Calm waves, but read the wind and steer.'], ['つぼみなる　花は咲く日を　知らねども', '日を浴びるほど　色はふかまる', 'The bud knows not its day; more sun, deeper color.']],
+    b: [['曇り空　月は隠れて　見えねども', '雲のむこうに　光はありけり', 'Clouds hide the moon, yet light remains beyond.'], ['冬枯れの　枝にも春の　芽はひそむ', '今はしずかに　時を待つべし', 'Bare branches hide spring buds. Wait quietly now.'],
+      ['荒波に　小舟を出すは　危うけれ', '港に休み　風を見るべし', 'Rough seas are no place for a small boat. Rest in port.'], ['落ち葉ふる　道に迷いて　立ちどまる', 'ふりむけばそこに　帰り道あり', 'Lost among falling leaves, look back: the way home is there.'],
+      ['雪ふかき　山路をゆけば　足とられ', 'ゆるりと進め　春は遠からじ', 'Deep snow trips your feet. Go slowly; spring is not far.'], ['夜ふけて　送る言葉は　風にちる', '朝日を待ちて　心ととのえ', 'Words sent late at night scatter. Wait for morning.'],
+      ['割れし器も　継げば景色と　なりにけり', '傷を恐れず　手をのばすべし', 'A mended bowl becomes beauty. Do not fear scars.'], ['長雨に　洗われし道　ぬかるめど', '晴れたる後は　花ぞ咲くらん', 'Mud after long rain, but flowers after it clears.']],
+  }
+  const SOHYO = {
+    dk: [['運気は満ちている。ただし浮かれて小指をぶつけるな', 'Luck is full. Do not stub your pinky celebrating.'], ['思い切ってよし。迷ったら前へ', 'Go boldly. If unsure, step forward.'], ['縁は向こうから来る。玄関を片付けておけ', 'Fate comes to you. Tidy your entrance.']],
+    ck: [['良い流れ。焦らず続ければ実る', 'A good flow. Keep at it and it bears fruit.'], ['人の縁に恵まれる。お礼を惜しむな', 'Blessed with people. Do not hold back thanks.'], ['晴れ間多し。傘は置いていってよい', 'Mostly clear. Leave the umbrella.']],
+    sk: [['小さな幸せを数えよ。一つ目はこのくじ', 'Count small joys. The first is this slip.'], ['控えめが吉。話は相手に七割させよ', 'Modesty wins. Let them talk seventy percent.'], ['少しずつ上向く。睡眠を削るな', 'Slowly rising. Do not cut sleep.']],
+    ki: [['穏やかな運。日々の挨拶が縁を呼ぶ', 'Gentle luck. Daily greetings invite fate.'], ['悪くない。むしろ普通が一番むずかしい', 'Not bad. Ordinary is the hardest.'], ['平らな道。寄り道に縁あり', 'A flat road. Detours hold fate.']],
+    sue: [['今は種まきの時。花はのちに咲く', 'Time to sow. Flowers come later.'], ['後から良くなる。いつかは言えない', 'Better later. When, we cannot say.'], ['遅咲きの運。急がず整えよ', 'Late-blooming luck. Prepare calmly.']],
+    kyo: [['今は守りの時。無理せず自分をいたわれ', 'Time to defend. Be gentle with yourself.'], ['焦れば裏目。一晩寝てから決めよ', 'Haste backfires. Sleep before deciding.'], ['底にいる時は上るだけ。結んで帰れ', 'At the bottom, only up. Tie this and go home.']],
+  }
+  const RITUAL = {
+    up: { ja: '間よく三度振れた。運が一段上がった', en: 'Three even shakes. Luck rose one step.' },
+    same: { ja: '振り方は並。くじのまま', en: 'An ordinary shake. The slip stands as is.' },
+    down: { ja: '振り急いだ。運が一段下がった', en: 'Rushed. Luck dropped one step.' },
+    greed: { ja: '本日三度目。神主さんがこちらを見ている', en: 'Third time today. The priest is watching.' },
+  }
   const LINES = {
-    priest: { ja: ['振りすぎです', 'お一人様、落ち着いて', '箱が泣いています', '欲が顔に出てます', '一回で十分です'], en: ['Too much shaking.', 'Please calm down.', 'The box is crying.', 'Your greed shows.', 'Once is enough.'] },
-    peek: { ja: ['……'], en: ['...'] },
-    ex: { ja: ['久しぶり', 'ちょっと話そ', '今なにしてるの', '髪切った？', '変わってないね', 'じゃ、また'], en: ['Long time.', 'Got a minute?', 'What are you up to?', 'New haircut?', 'You never change.', 'See you.'] },
-    ex2: { ja: ['紹介するね', 'こっち、今の恋人', '式には呼ぶね', '幸せになってね'], en: ['Meet my partner.', 'This is them.', 'You are invited.', 'Be happy, okay?'] },
-    crow: { ja: ['カァ'], en: ['Caw'] },
-    end: { ja: '本日は閉門です', en: 'The shrine is closing.' },
+    slow: { ja: ['ゆっくり、三度です', '落ち着いて', '箱が驚いています'], en: ['Slowly. Three times.', 'Calm down.', 'The box is startled.'] },
+    greed: { ja: ['……どうぞ', '本日は三度目ですね'], en: ['...Go ahead.', 'Third today, I see.'] },
   }
-
   const UI = {
     ja: {
-      title: '恋みくじ連打', sub: '閉門まで45秒。引けるだけ引け', start: '引きに行く', how: '遊び方', book: '図鑑', back: 'もどる',
-      load: 'みくじを振っています', close: '閉門まで', en: '縁', yen: '円',
-      howBody: [
-        '<b>1.</b> 箱をトン、トンと振る。速く振りすぎると詰まって、神主さんに止められる',
-        '<b>2.</b> 棒が出たら、光った瞬間に抜く。光が強いほど良いくじ。たまに来る金の光では珍しいくじが出る',
-        '<b>3.</b> 凶は右の結び処を3回押して結べば帳消し。結ばずに箱を振ると、カラスや元恋人が来る',
-      ],
-      tut: { shake: 'トン、トン、と箱を振る', pull: '光った瞬間に棒を押して抜く', open: '紙を押して開く', tie: '凶は結び処に3回で帳消し', gold: '金の光は珍しいくじ' },
-      curse: { crow: '結ばないと|カラス', crow2: '結ばないと|カラス2羽', ex: '結ばないと|元恋人', ex2: '結ばないと|元恋人と|今の恋人' },
-      tieHere: '結ぶ', stolen: '持っていかれた', jam: '詰まった', rack: '結び処', exTag: ['元カレ', '元カノ'], newTag: '今の恋人',
-      result: '縁結び判定', drew: '引いた', times: '回', tied: '結んだ', cost: 'おみくじ代', bestSlip: 'いちばんの一枚', best: 'これまでの最高',
-      save: '画像を保存', post: 'Xでポスト', again: 'もう一回', got: (n, m) => `集めた ${n} / ${m}`, locked: 'まだ引いていない', rare: '珍',
-      affBtn: '本当の恋愛運、占ってみる？', affNote: '17歳以上',
-      postText: (lv, n, slip) => `恋みくじを45秒で${n}回引いた。縁結びは「${lv}」。いちばんの一枚「${slip}」 #恋みくじ連打`,
-      credits: '音: Kenney / rubberduck / PWL / fvcalderan / zeroisnotnull / IgnasD / VishwaJai / Kistol / Joseph Sardin（すべて CC0）。この神社は架空です',
-      privacy: 'プライバシー', pc: false,
+      title: '恋みくじ', sub: '夕暮れの神社で、一日一枚', start: 'くじを引く', how: '引き方', book: '引いた運勢', back: 'もどる', load: 'みくじを振っています',
+      askName: 'お名前', namePh: '書かなくてもよい', nameNote: 'どこにも送らず、残しません', askSit: 'いまの恋', go: '箱を振る',
+      tShake: '願いを思いながら、ゆっくり三度', tPull: '光が満ちた時に棒を引く', tOpen: '紙を開く',
+      san: 'さん', no: n => `第${n}番`, tie: '結び処に結ぶ', tied: '結んで帰った', save: '画像で持ち帰る', post: 'Xでポスト',
+      again: '今日はもう一回だけ', tomorrow: 'また明日', greed: 'どうしても引く',
+      affBtn: '本当の恋愛運を占い師に見てもらう', affNote: '17歳以上', sohyo: '総評',
+      postText: (sit, rank, it) => `恋みくじを引いた。${sit}、${rank}。${it} #恋みくじ`,
+      howBody: ['<b>1.</b> お名前（書かなくてもよい）と、いまの恋を選ぶ', '<b>2.</b> 願いを思いながら、箱をゆっくり三度振る。間がそろうほど良い。急ぐと運が一段下がる', '<b>3.</b> 棒が光る。光が満ちた時に引くと運が上がる。紙を開いて読む。凶は結び処に結んで帰る', '引けるのは一日に二度まで。'],
+      credits: '音: Kenney / rubberduck / PWL / IgnasD / Kistol / Joseph Sardin（すべて CC0）。この神社は架空です', privacy: 'プライバシー',
+      got: (n, m) => `${n} / ${m}`, none: 'まだ引いていない',
     },
     en: {
-      title: 'Love Fortune Frenzy', sub: '45 seconds until closing. Draw all you can.', start: 'Go draw', how: 'How to play', book: 'Collection', back: 'Back',
-      load: 'Shaking the box', close: 'Closing in', en: 'Ties', yen: '',
-      howBody: [
-        '<b>1.</b> Shake the box with steady taps. Shake too fast and it jams, and the priest stops you.',
-        '<b>2.</b> When a stick slides out, pull it the moment it glows. Brighter glow, better fortune. A rare gold glow brings rare fortunes.',
-        '<b>3.</b> Bad luck? Tap the tying rack on the right 3 times to cancel it. Shake again without tying and a crow or your ex shows up.',
-      ],
-      tut: { shake: 'Tap the box, steady', pull: 'Pull it when it glows', open: 'Tap the paper to open', tie: 'Tie bad luck: rack x3', gold: 'Gold glow: rare fortune' },
-      curse: { crow: 'If untied:|a crow', crow2: 'If untied:|two crows', ex: 'If untied:|your ex', ex2: 'If untied:|ex and|new partner' },
-      tieHere: 'Tie', stolen: 'Stolen', jam: 'Jammed', rack: 'Tying rack', exTag: ['Ex', 'Ex'], newTag: 'New partner',
-      result: 'Your Ties', drew: 'Drawn', times: '', tied: 'Tied', cost: 'Spent', bestSlip: 'Best fortune', best: 'Best so far',
-      save: 'Save image', post: 'Post on X', again: 'Again', got: (n, m) => `Found ${n} / ${m}`, locked: 'Not drawn yet', rare: 'Rare',
-      affBtn: 'Want a real love reading?', affNote: 'Ages 17+',
-      postText: (lv, n, slip) => `I drew ${n} love fortunes in 45 seconds. Result: "${lv}". Best one: "${slip}" #LoveFortuneFrenzy`,
-      credits: 'Sounds: Kenney / rubberduck / PWL / fvcalderan / zeroisnotnull / IgnasD / VishwaJai / Kistol / Joseph Sardin (all CC0). The shrine is fictional.',
-      privacy: 'Privacy',
+      title: 'Love Fortune Slip', sub: 'One slip a day, at a shrine at dusk', start: 'Draw a slip', how: 'How to draw', book: 'Your fortunes', back: 'Back', load: 'Shaking the box',
+      askName: 'Your name', namePh: 'Optional', nameNote: 'Never sent, never saved', askSit: 'Your love life', go: 'Shake the box',
+      tShake: 'Make a wish. Shake slowly, three times', tPull: 'Pull the stick when the glow is full', tOpen: 'Open the paper',
+      san: '', no: n => `No. ${n}`, tie: 'Tie it at the rack', tied: 'Tied and left behind', save: 'Save image', post: 'Post on X',
+      again: 'One more today', tomorrow: 'Come back tomorrow', greed: 'Draw anyway',
+      affBtn: 'Get a real love reading from a fortune teller', affNote: 'Ages 17+', sohyo: 'Overall',
+      postText: (sit, rank, it) => `I drew a love fortune. ${sit}: ${rank}. ${it} #LoveFortuneSlip`,
+      howBody: ['<b>1.</b> Enter your name (optional) and pick your situation.', '<b>2.</b> Make a wish and shake the box slowly, three times. Even timing helps. Rushing lowers your luck one step.', '<b>3.</b> The stick glows. Pull when the glow is full to raise your luck. Open the slip and read. Tie a curse at the rack.', 'Two draws a day.'],
+      credits: 'Sounds: Kenney / rubberduck / PWL / IgnasD / Kistol / Joseph Sardin (all CC0). The shrine is fictional.', privacy: 'Privacy',
+      got: (n, m) => `${n} / ${m}`, none: 'Not drawn yet',
     },
   }
-  return { R, C, SLIPS, LV, NOPLAY, LINES, UI, ORDER: ['dk', 'ki', 'sk', 'sue', 'kyo', 'dkyo'] }
+  return { RANK, FATE, SIT, LABEL, T, PLACE, WAKA, SOHYO, RITUAL, LINES, UI }
 })()
