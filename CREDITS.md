@@ -1,0 +1,40 @@
+- snd/shake1.mp3: 54 Casino sound effects (cards, dice, chips) / Kenney / CC0
+- snd/shake2.mp3: 54 Casino sound effects (cards, dice, chips) / Kenney / CC0
+- snd/shake3.mp3: 54 Casino sound effects (cards, dice, chips) / Kenney / CC0
+- snd/pop1.mp3: 100 CC0 SFX / rubberduck / CC0
+- snd/pop2.mp3: 100 CC0 SFX / rubberduck / CC0
+- snd/pop3.mp3: 100 CC0 SFX / rubberduck / CC0
+- snd/pull1.mp3: 100 CC0 SFX #2 / rubberduck / CC0
+- snd/pull2.mp3: 100 CC0 SFX #2 / rubberduck / CC0
+- snd/slip1.mp3: 54 Casino sound effects (cards, dice, chips) / Kenney / CC0
+- snd/slip2.mp3: 54 Casino sound effects (cards, dice, chips) / Kenney / CC0
+- snd/paper1.mp3: 100 CC0 SFX / rubberduck / CC0
+- snd/paper2.mp3: 100 CC0 SFX / rubberduck / CC0
+- snd/paper3.mp3: 100 CC0 SFX / rubberduck / CC0
+- snd/paper4.mp3: 100 CC0 SFX / rubberduck / CC0
+- snd/bell1.mp3: Bell dings/chimes / PWL / CC0
+- snd/bell2.mp3: Bell dings/chimes / PWL / CC0
+- snd/bell3.mp3: Bell dings/chimes / PWL / CC0
+- snd/bellrare.mp3: 100 CC0 SFX / rubberduck / CC0
+- snd/bellend.mp3: 100 CC0 SFX / rubberduck / CC0
+- snd/bad1.mp3: 75 CC0 breaking / falling / hit sfx / rubberduck / CC0
+- snd/bad2.mp3: 75 CC0 breaking / falling / hit sfx / rubberduck / CC0
+- snd/tie1.mp3: 50 RPG sound effects / Kenney / CC0
+- snd/tie2.mp3: 50 RPG sound effects / Kenney / CC0
+- snd/tie3.mp3: 50 RPG sound effects / Kenney / CC0
+- snd/jam.mp3: 75 CC0 breaking / falling / hit sfx / rubberduck / CC0
+- snd/clap1.mp3: 100 CC0 SFX #2 / rubberduck / CC0
+- snd/clap2.mp3: 100 CC0 SFX #2 / rubberduck / CC0
+- snd/crow1.mp3: Crow / fvcalderan / CC0
+- snd/crow2.mp3: Crow / fvcalderan / CC0
+- snd/flap.mp3: Dragon Flap / VishwaJai / CC0
+- snd/step1.mp3: 100 CC0 SFX #2 / rubberduck / CC0
+- snd/step2.mp3: 100 CC0 SFX #2 / rubberduck / CC0
+- snd/step3.mp3: 100 CC0 SFX #2 / rubberduck / CC0
+- snd/push.mp3: 50 RPG sound effects / Kenney / CC0
+- snd/jgood.mp3: 85 Short music jingles / Kenney / CC0
+- snd/jmeh.mp3: 85 Short music jingles / Kenney / CC0
+- snd/click.mp3: Interface Sounds / Kenney / CC0
+- snd/amb_birds.mp3: File:Réveil_des_oiseaux.ogg (5-23秒) / Joseph Sardin / CC0
+- snd/amb_crows.mp3: Crow / fvcalderan / CC0
+- snd/bgm.mp3: Hot Springs Town / Kistol / CC0
