@@ -43,7 +43,7 @@ input{font:inherit;-webkit-user-select:text;user-select:text}
 #corner svg{width:20px;height:20px;fill:#f3e6cc}
 
 /* タイトル */
-#vTitle .wrap{display:flex;flex-direction:column;align-items:center;padding:calc(56px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom))}
+#vTitle .wrap{display:flex;flex-direction:column;align-items:center;padding:calc(56px + env(safe-area-inset-top)) 16px calc(18px + calc(env(safe-area-inset-bottom) + var(--inapp-bot,0px)))}
 .tMid{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;gap:5vw}
 .tSlip{position:relative;height:min(52svh,380px);aspect-ratio:1/2.4;background:var(--paper);box-shadow:0 14px 30px rgba(0,0,0,.45);transform:rotate(-2deg);padding:10% 0;display:flex;flex-direction:column;align-items:center;outline:2px solid var(--shu);outline-offset:-9px}
 .tSlip::before{content:"";position:absolute;left:50%;top:-34px;width:2px;height:40px;background:#e9dcc0;transform:translateX(-50%)}
@@ -64,7 +64,7 @@ input{font:inherit;-webkit-user-select:text;user-select:text}
 #tToday{font-size:12px;color:#d9c6a2;min-height:16px}
 
 /* 名前と状況（社務所の申込み紙） */
-#vAsk .wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:calc(56px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom))}
+#vAsk .wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:calc(56px + env(safe-area-inset-top)) 16px calc(16px + calc(env(safe-area-inset-bottom) + var(--inapp-bot,0px)))}
 .form{width:min(100%,380px);background:var(--paper);padding:18px 16px 16px;box-shadow:0 12px 26px rgba(0,0,0,.45);outline:2px solid var(--shu);outline-offset:-7px;display:flex;flex-direction:column;gap:8px}
 .form label,.form .lab{font-family:var(--min);font-weight:800;font-size:15px;color:var(--shu)}
 #name{width:100%;height:46px;border:0;border-bottom:2px solid #8a7458;background:transparent;font-family:var(--min);font-weight:800;font-size:20px;color:var(--ink);padding:0 4px;border-radius:0;outline:none}
@@ -78,7 +78,7 @@ input{font:inherit;-webkit-user-select:text;user-select:text}
 #vPlay .wrap{display:flex;flex-direction:column}
 #hint{position:absolute;left:50%;top:calc(66px + env(safe-area-inset-top));transform:translateX(-50%) rotate(-1.2deg);z-index:6;background:#f6edd8;color:var(--ink);font-family:var(--min);font-weight:800;font-size:15px;padding:7px 14px 8px;border-left:4px solid var(--shu);box-shadow:0 3px 8px rgba(0,0,0,.4);white-space:nowrap;pointer-events:none}
 #stage{position:absolute;left:0;right:0;top:calc(110px + env(safe-area-inset-top));bottom:0}
-#counter{position:absolute;left:-50vw;right:-50vw;bottom:0;height:calc(16% + env(safe-area-inset-bottom));background:linear-gradient(#8a5a35,#6b4226 30%,#53321b);box-shadow:0 -3px 8px rgba(0,0,0,.35)}
+#counter{position:absolute;left:-50vw;right:-50vw;bottom:0;height:calc(16% + calc(env(safe-area-inset-bottom) + var(--inapp-bot,0px)));background:linear-gradient(#8a5a35,#6b4226 30%,#53321b);box-shadow:0 -3px 8px rgba(0,0,0,.35)}
 #counter::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:#a46d43}
 #boxArt{position:absolute;z-index:3;left:50%;top:0;height:52%;aspect-ratio:160/250;transform:translateX(-50%);transform-origin:50% 25%;pointer-events:none}
 #boxArt svg{width:100%;height:100%;display:block;filter:drop-shadow(0 8px 10px rgba(0,0,0,.4))}
@@ -111,7 +111,7 @@ input{font:inherit;-webkit-user-select:text;user-select:text}
 @keyframes poke{50%{transform:translate(4px,8px) scale(.92)}}
 
 /* 結果（一枚の紙） */
-#vEnd .wrap{display:flex;flex-direction:column;align-items:center;gap:7px;padding:calc(54px + env(safe-area-inset-top)) 12px calc(8px + env(safe-area-inset-bottom))}
+#vEnd .wrap{display:flex;flex-direction:column;align-items:center;gap:7px;padding:calc(54px + env(safe-area-inset-top)) 12px calc(8px + calc(env(safe-area-inset-bottom) + var(--inapp-bot,0px)))}
 #slipBox{flex:1;min-height:0;width:100%;display:flex;align-items:stretch;justify-content:center;position:relative}
 #slip{position:relative;height:100%;width:min(100%,430px);background:var(--paper);box-shadow:0 12px 28px rgba(0,0,0,.5);padding:.9em .8em;display:flex;flex-direction:column;gap:.5em;outline:2px solid var(--shu);outline-offset:-6px;overflow:hidden;font-size:16px;transform-origin:50% 0}
 #slip::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(8deg,rgba(120,90,50,.035) 0 2px,transparent 2px 6px)}
@@ -163,7 +163,7 @@ input{font:inherit;-webkit-user-select:text;user-select:text}
 #slip:not(.en) .sWaka p span{white-space:nowrap;display:inline-block}
 #slip:not(.en) .sWaka .lo{padding-top:1.8em}
 
-.ovl{position:fixed;inset:0;z-index:70;background:#10141f;display:flex;flex-direction:column;padding:calc(54px + env(safe-area-inset-top)) 14px calc(12px + env(safe-area-inset-bottom));color:#f3e6cc}
+.ovl{position:fixed;inset:0;z-index:70;background:#10141f;display:flex;flex-direction:column;padding:calc(54px + env(safe-area-inset-top)) 14px calc(12px + calc(env(safe-area-inset-bottom) + var(--inapp-bot,0px)));color:#f3e6cc}
 .ovl .in{max-width:460px;width:100%;margin:0 auto;display:flex;flex-direction:column;height:100%;min-height:0}
 .ovl h2{font-family:var(--min);font-weight:800;font-size:20px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline}
 .ovl h2 span{font-size:13px;font-weight:600;color:#cdbb98}
@@ -342,6 +342,6 @@ input{font:inherit;-webkit-user-select:text;user-select:text}
 <script src="data.js?v=2"></script>
 <script src="logic.js?v=2"></script>
 <script src="game.js?v=2"></script>
-<script src="support.js?v=2" data-ja="お守り" data-en="a lucky charm"></script>
+<script src="support.js?v=3" data-ja="お守り" data-en="a lucky charm"></script>
 </body>
 </html>
